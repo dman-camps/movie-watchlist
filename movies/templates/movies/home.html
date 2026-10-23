@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Watchlist</title>
+</head>
+<body>
+    <h1>Movie Watchlist</h1>
+
+    
+<h2>Add a Movie</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <label for="title">Movie Title:</label>
+    <input type="text" id="title" name="title" required>
+    <br><br>
+
+    
+    <label for="release_year">Release Year:</label>
+    <input type="text" id="release_year" name="release_year" maxlength="4" pattern="[0-9]{4}" title="Enter a four-digit year" style="width: 40px;">
+    <br><br>
+
+    
+    <label for="genre">Genre:</label>
+    <select id="genre" name="genre">
+        <option value="">Select a genre</option>
+        <option value="Action">Action</option>
+        <option value="Adventure">Adventure</option>
+        <option value="Animation">Animation</option>
+        <option value="Biography">Biography</option>
+        <option value="Comedy">Comedy</option>
+        <option value="Crime">Crime</option>
+        <option value="Documentary">Documentary</option>
+        <option value="Drama">Drama</option>
+        <option value="Fantasy">Fantasy</option>
+        <option value="Horror">Horror</option>
+        <option value="Mystery">Mystery</option>
+        <option value="Romance">Romance</option>
+        <option value="Sci-Fi">Sci-Fi</option>
+        <option value="Thriller">Thriller</option>
+        <option value="Western">Western</option>
+    </select>
+    <br><br>
+
+    <label for="watched">Already Watched?</label>
+    <input type="checkbox" id="watched" name="watched">
+    <br><br>
+
+    <button type="submit">Add Movie</button>
+    <br><br><br><br>
+
+    <h2>My Movies</h2>
+</form>
+    
+<form method="get">
+    <input type="text" name="q" placeholder="Search movies..." value="{{ query }}">
+    <button type="submit">Search</button>
+    <a href="{% url 'home' %}">Clear Search</a>
+</form>
+    <hr>
+
+    {% for movie in movies %}
+        <div>
+            <h3>{{ movie.title }}</h3>
+            <p>Release Year: {{ movie.release_year|default:"Unknown" }}</p>
+            <p>Genre: {{ movie.genre|default:"Not specified" }}</p>
+            <p>Status: {% if movie.watched %}Watched{% else %}Not watched{% endif %}</p>
+        </div>
+        <hr>
+    {% empty %}
+        <p>No movies in your watchlist yet.</p>
+    {% endfor %}
+</body>
+</html>
