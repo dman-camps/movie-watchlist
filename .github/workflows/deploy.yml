@@ -1,0 +1,21 @@
+﻿name: Deploy Movie Watchlist
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, Linux, X64]
+
+    steps:
+      - name: Deploy application
+        run: |
+          set -e
+          cd /home/ubuntu/movie-watchlist
+          git fetch origin main
+          git merge --ff-only origin/main
+          /home/ubuntu/movie-watchlist/venv/bin/pip install -r requirements.txt
+          /home/ubuntu/movie-watchlist/venv/bin/python manage.py migrate --noinput
+          sudo /usr/bin/systemctl restart movie-watchlist
